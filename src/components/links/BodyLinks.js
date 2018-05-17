@@ -31,16 +31,29 @@ class BodyLinks extends Component{
 							</TableRow>
 						</TableHeader>
 						<TableBody displayRowCheckbox ={false}>
-							<TableRowColumn></TableRowColumn>
+							{
+								this.state.data.map(link => {
+									return <TableRow key={link.id}>
+										<TableRowColumn>{link.title}</TableRowColumn>
+										<TableRowColumn>{link.destination}</TableRowColumn>
+										<TableRowColumn>{link.shortUrl}</TableRowColumn>
+									</TableRow>
+								})
+							}
 						</TableBody>
 					</Table>
 				</div>
 			)
 	}
-	displayLink(){
-		return fetch('https://api.rebrandly.com/v1/links')
+
+	componentWillMount(){
+		return fetch('https://api.rebrandly.com/v1/links', {
+			headers: {
+				apikey: sessionStorage.getItem("password")
+			}
+		})
 			.then(response => {return response.json()})
-			.then(({results:data}) => this.setState({data}))
+			.then(data => { this.setState({data})})
 	}	
 	
 }
